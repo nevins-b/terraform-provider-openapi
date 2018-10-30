@@ -2,6 +2,7 @@ package openapi
 
 import (
 	"fmt"
+
 	"github.com/go-openapi/spec"
 )
 
@@ -15,7 +16,8 @@ type specV2Security struct {
 func (s *specV2Security) GetAPIKeySecurityDefinitions() (*SpecSecurityDefinitions, error) {
 	securityDefinitions := &SpecSecurityDefinitions{}
 	for secDefName, secDef := range s.SecurityDefinitions {
-		if secDef.Type == "apiKey" {
+		switch secDef.Type {
+		case "apiKey":
 			switch secDef.In {
 			case "header":
 				*securityDefinitions = append(*securityDefinitions, newAPIKeyHeaderSecurityDefinition(secDefName, secDef.Name))
@@ -24,7 +26,10 @@ func (s *specV2Security) GetAPIKeySecurityDefinitions() (*SpecSecurityDefinition
 			default:
 				return nil, fmt.Errorf("apiKey In value '%s' not supported, only 'header' and 'query' values are valid", secDef.In)
 			}
-
+		case "basic":
+			*securityDefinitions = append(*securityDefinitions, newBasicAuthSecurityDefinition(secDefName))
+		default:
+			return nil, fmt.Errorf("'%s' not supported, only 'apiKey' and 'basic' values are valid", secDef.Type)
 		}
 	}
 	return securityDefinitions, nil

@@ -42,6 +42,17 @@ func newAPIKeySecurityDefinition(name string, apiKey specAPIKey) SpecSecurityDef
 	}
 }
 
+func newBasicAuthSecurityDefinition(name string) SpecSecurityDefinition {
+	return SpecSecurityDefinition{
+		Name: name,
+		Type: "basic",
+		apiKey: specAPIKey{
+			In:   inHeader,
+			Name: "Authorization",
+		},
+	}
+}
+
 func (o *SpecSecurityDefinition) getTerraformConfigurationName() string {
 	return terraformutils.ConvertToTerraformCompliantName(o.Name)
 }

@@ -2,10 +2,11 @@ package openapi
 
 import (
 	"fmt"
-	"github.com/dikhan/http_goclient"
 	"log"
 	"net/http"
 	"strings"
+
+	"github.com/dikhan/http_goclient"
 )
 
 type httpMethodSupported string
@@ -106,7 +107,7 @@ func (o *ProviderClient) logHeadersSafely(headers map[string]string) {
 		if headerValue == "" {
 			log.Printf("[DEBUG] Request Header '%s' sent with empty value :(", headerName)
 		}
-		log.Printf("[DEBUG] Request Header '%s' sent", headerName)
+		log.Printf("[DEBUG] Request Header '%s' sent with value '%s'", headerName, headerValue)
 	}
 }
 
